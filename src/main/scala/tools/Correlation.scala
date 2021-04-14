@@ -1,20 +1,33 @@
 package tools
 
 object Correlation {
-  def coefficient(seq0: Seq[Double], seq1: Seq[Double]): Double =
-    if (seq0 == seq1 && seq0.length > 1) {
+  def covariant(seq0: Seq[Double], seq1: Seq[Double]): Double =
+    if (seq0.length == seq1.length && seq0.length > 1) {
       val aver0 = seq0.sum / seq0.length
       val aver1 = seq1.sum / seq1.length
-      (for (i <- 0 until seq0.length) yield (seq0(i) - aver0) * (seq1(i) - aver1))
-        .sum / (seq0.length - 1)
+        (for (i <- 0 until seq0.length) yield (seq0(i) - aver0) * (seq1(i) - aver1))
+          .sum
+    } else 0
+
+  def coefficient(seq0: Seq[Double], seq1: Seq[Double]): Double =
+    if (seq0.length == seq1.length && seq0.length > 1) {
+      val aver0 = seq0.sum / seq0.length
+      val aver1 = seq1.sum / seq1.length
+      val max =
+        (for (i <- 0 until seq0.length) yield Math.pow(seq0(i) - aver0, 2)).sum *
+          (for (i <- 0 until seq0.length) yield Math.pow(seq1(i) - aver1, 2)).sum
+      if (max != 0) {
+        (for (i <- 0 until seq0.length) yield (seq0(i) - aver0) * (seq1(i) - aver1))
+          .sum / Math.sqrt(max)
+      } else 0
     } else 0
 
 
   def apply(seq0: Seq[Double], seq1: Seq[Double]): Seq[Double] =
-    if (seq0 == seq1 && seq0.length > 1) {
-      val size: Int = Math.round(seq0.length / 2)
-      for (i <- 0 until size) yield
-        coefficient(seq0.slice(0, size), seq1.slice(i, size + i))
+    if (seq0.length == seq1.length && seq0.length > 1) {
+      val halfSize: Int = Math.round(seq0.length / 2)
+      for (i <- 0 until halfSize) yield
+        covariant(seq0.slice(0, halfSize), seq1.slice(i, halfSize + i)) / (seq0.length - 1)
     } else Seq()
 
   def apply(seq: Seq[Double]): Seq[Double] = apply(seq, seq)
