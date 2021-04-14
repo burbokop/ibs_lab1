@@ -1,8 +1,6 @@
 import Main.x
-import tools.{Correlation, SignalGenerator}
+import tools.{Correlation, Fourier, SignalGenerator}
 
-import java.awt.image.BufferedImage
-import scala.util.Random
 import org.nspl.{line, _}
 import awtrenderer._
 
@@ -27,6 +25,11 @@ object Main extends App {
   println(s"corelation func y0 with y0: $c00")
   println(s"corelation func y0 with y1: $c01")
 
+  val fourierY0Func = Fourier.transform(y0, y0.length)
+  val fourierY0Seq = (0 until y0.length).map(fourierY0Func)
+
+  println(s"fourier transform of y0: $fourierY0Seq")
+
   val plot0 = xyplot(
     x -> y0 -> line(stroke = StrokeConf(0.1 fts), color = Color(255, 0, 0)),
     x -> c00.map(_ * 10) -> line(stroke = StrokeConf(0.1 fts), color = Color(0, 0, 255)),
@@ -46,8 +49,16 @@ object Main extends App {
     main = "red - orig sig 0, green - orig sig 1, blue - correlation sig0 with sig1",
   )
 
+  val plot2 = xyplot(
+    x -> fourierY0Seq -> line(stroke = StrokeConf(0.1 fts), color = Color(0, 0, 255))
+  )(
+    ylab = "A",
+    xlab = "freq",
+    main = "blue - fourier transform of sig0",
+  )
 
 
   show(plot0)
   show(plot1)
+  show(plot2)
 }
