@@ -20,3 +20,11 @@ in root folder of repository: `sbt "run"`
 ## lab2 fourier transform of sig0
 
 ![alt text](https://github.com/burbokop/ies_lab1-2/blob/master/fourier0.png)
+
+## lab2 fourier transform of sig0 & fast fourier transform of sig0
+
+![alt text](https://github.com/burbokop/ies_lab1-2/blob/master/fourier_and_fast_fourier.png)
+
+## lab2 DFT & FFT elapsed time depends on N(iteration count)
+
+![alt text](https://github.com/burbokop/ies_lab1-2/blob/master/fourier_algo_comparison.png)
