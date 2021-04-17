@@ -1,6 +1,5 @@
-import Main.x
-import tools.{Correlation, Fourier, SignalGenerator}
 
+import tools.{Correlation, ElapsedTimer, Fourier, SignalGenerator}
 import org.nspl.{line, _}
 import awtrenderer._
 
@@ -25,10 +24,26 @@ object Main extends App {
   println(s"corelation func y0 with y0: $c00")
   println(s"corelation func y0 with y1: $c01")
 
+  val fourierTimer = new ElapsedTimer()
   val fourierY0Func = Fourier.transform(y0, y0.length)
   val fourierY0Seq = (0 until y0.length).map(fourierY0Func)
+  val fourierTimerElapsed = fourierTimer.elapsedNano
+
+  val fastFourierTimer = new ElapsedTimer()
+  val fastFourierY0Func = Fourier.fastTransform(y0, y0.length)
+  val fastFourierY0Seq = (0 until y0.length).map(fastFourierY0Func)
+  val fastFourierTimerElapsed = fastFourierTimer.elapsedNano
+
+  println(s"slow fourier transform duration: $fourierTimerElapsed us")
+  println(s"fast fourier transform duration: $fastFourierTimerElapsed us")
+
+  val cpNSeq = 32 to 4096 by 16
+  val cpSeq = Fourier.generateComparisonSequence(signalGenerator, cpNSeq)
+
 
   println(s"fourier transform of y0: $fourierY0Seq")
+  println(s"fast fourier transform of y0: $fastFourierY0Seq")
+  println(s"fourier transform time comparison sequence in ms: $cpSeq")
 
   val plot0 = xyplot(
     x -> y0 -> line(stroke = StrokeConf(0.1 fts), color = Color(255, 0, 0)),
@@ -50,15 +65,27 @@ object Main extends App {
   )
 
   val plot2 = xyplot(
-    x -> fourierY0Seq -> line(stroke = StrokeConf(0.1 fts), color = Color(0, 0, 255))
+    x -> fourierY0Seq -> line(stroke = StrokeConf(0.1 fts), color = Color(0, 0, 255)),
+    x -> fastFourierY0Seq -> line(stroke = StrokeConf(0.1 fts), color = Color(255, 0, 255))
   )(
     ylab = "A",
     xlab = "freq",
-    main = "blue - fourier transform of sig0",
+    main = "blue - fourier transform of sig0, violet - fast fourier transform of sig0",
   )
+
+  val plot3 = xyplot(
+    cpNSeq.map(_.toDouble) -> cpSeq.map(_._1) -> line(stroke = StrokeConf(0.1 fts), color = Color(0, 0, 255)),
+    cpNSeq.map(_.toDouble) -> cpSeq.map(_._2) -> line(stroke = StrokeConf(0.1 fts), color = Color(255, 0, 255))
+  )(
+    ylab = "Duration",
+    xlab = "N",
+    main = "blue - fourier transform elapsed time in ms, violet - fast fourier transform elapsed time in ms",
+  )
+
 
 
   show(plot0)
   show(plot1)
   show(plot2)
+  show(plot3)
 }
