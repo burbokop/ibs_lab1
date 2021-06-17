@@ -20,7 +20,6 @@ object Fourier {
         ).abs
     } else 0
 
-
   def generateComparisonSequence(signalGenerator: SignalGenerator, nSeq: Seq[Int]) = {
     nSeq.map { N =>
       println(s"Compare DFT & FFT N: $N, MAX: ${nSeq.last}")

@@ -29,6 +29,12 @@ in root folder of repository: `sbt "run"`
 
 ![alt text](https://github.com/burbokop/ies_lab1-2/blob/master/fourier_and_fast_fourier.png)
 
+
+## lab2 delta between DFT & FFT 
+
+![alt text](https://github.com/burbokop/ies_lab1-2/blob/master/fourier_delta_plot.png)
+
+
 ## lab2 DFT & FFT elapsed time depends on N(iteration count)
 
 ![alt text](https://github.com/burbokop/ies_lab1-2/blob/master/fourier_algo_comparison.png)

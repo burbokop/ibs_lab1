@@ -45,12 +45,16 @@ object Main extends App {
   println(s"slow fourier transform duration: $fourierTimerElapsed us")
   println(s"fast fourier transform duration: $fastFourierTimerElapsed us")
 
-  val cpNSeq = 32 to 4096 by 16 //TO DO made 4096
+  val cpNSeq = 32 to 1024 by 16 //TO DO made 4096
   val cpSeq = Fourier.generateComparisonSequence(signalGenerator, cpNSeq)
 
   println(s"fourier transform of y0: $fourierY0Seq")
   println(s"fast fourier transform of y0: $fastFourierY0Seq")
   println(s"fourier transform time comparison sequence in ms: $cpSeq")
+
+  //2.2. згенеруйте сигнал, проведіть DFT та FFT над ними, та побудуйте графік відхилення результату DFT від FFT.
+  val fourierDeltaSeq = SignalGenerator.deltaSeq(fourierY0Seq, fastFourierY0Seq)
+  // --------
 
   val plot0 = xyplot(
     x -> y0 -> line(stroke = StrokeConf(0.1 fts), color = Color(255, 0, 0)),
@@ -90,6 +94,14 @@ object Main extends App {
   )
 
   val plot4 = xyplot(
+    x -> fourierDeltaSeq -> line(stroke = StrokeConf(0.1 fts), color = Color(0, 0, 255)),
+  )(
+    ylab = "Δ A",
+    xlab = "freq",
+    main = "delta sequence of DFT & FFT",
+  )
+
+  val plot5 = xyplot(
     cpNSeq.map(_.toDouble) -> cpSeq.map(_._1) -> line(stroke = StrokeConf(0.1 fts), color = Color(0, 0, 255)),
     cpNSeq.map(_.toDouble) -> cpSeq.map(_._2) -> line(stroke = StrokeConf(0.1 fts), color = Color(255, 0, 255))
   )(
@@ -98,11 +110,10 @@ object Main extends App {
     main = "blue - fourier transform elapsed time in ms, violet - fast fourier transform elapsed time in ms",
   )
 
-
-
   show(plot0)
   show(plot1)
   show(plot2)
   show(plot3)
   show(plot4)
+  show(plot5)
 }

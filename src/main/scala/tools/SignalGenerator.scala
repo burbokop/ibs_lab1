@@ -19,3 +19,9 @@ class SignalGenerator(harmonicsCount: Int, limitFreq: Double, amplitude: Double 
       generate(i)
     })
 }
+
+object SignalGenerator {
+  def deltaSeq(seq0: Seq[Double], seq1: Seq[Double]): Seq[Double] =
+    (0 until Math.min(seq0.length, seq1.length))
+      .map(i => Math.abs(seq0(i) - seq1(i)))
+}
