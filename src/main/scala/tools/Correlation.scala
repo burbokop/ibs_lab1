@@ -1,5 +1,6 @@
 package tools
 
+
 object Correlation {
   def covariant(seq0: Seq[Double], seq1: Seq[Double]): Double =
     if (seq0.length == seq1.length && seq0.length > 1) {
@@ -31,5 +32,18 @@ object Correlation {
     } else Seq()
 
   def apply(seq: Seq[Double]): Seq[Double] = apply(seq, seq)
+
+
+  def generateComparisonSequence(signalGenerator: SignalGenerator, nSeq: Seq[Int]): (Seq[Long], Seq[Long]) = {
+    nSeq.map { N =>
+      val x = (0 until N).map(_.toDouble)
+      val y0 = signalGenerator.generateSeq(x)
+      val y1 = signalGenerator.generateSeq(x)
+      (
+        ElapsedTimer.measure(() => Correlation(y0, y1))._1,
+        ElapsedTimer.measure(() => Correlation(y0, y0))._1
+      )
+    }.unzip
+  }
 
 }

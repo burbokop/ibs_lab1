@@ -17,6 +17,10 @@ in root folder of repository: `sbt "run"`
 
 ![alt text](https://github.com/burbokop/ibs_lab1-2/blob/master/autocorrelation.png)
 
+## lab1.2 correlation & auto correlation time
+
+![alt text](https://github.com/burbokop/ibs_lab1-2/blob/master/corel_time_comparison.png)
+
 ## lab2 fourier transform of sig0
 
 ![alt text](https://github.com/burbokop/ies_lab1-2/blob/master/fourier0.png)
